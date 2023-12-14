@@ -1,0 +1,12 @@
+
+GET http://localhost:1011/api/user-list HTTP/1.1
+
+###
+POST http://localhost:1011/api/register
+Content-Type: application/json
+
+{
+    "name": "user2", 
+    "email": "user2@gmail.com", 
+    "password": "passuser1"
+} 
