@@ -22,7 +22,7 @@ app.get("/trial", (req,res) => {
     res.send("Trial Page");
 });
 
-//pass new user info for registration
+//pass new user info for registration form
 app.post('/api/register', async (req, res) => {
     console.log(req.body);
     try {
@@ -31,10 +31,10 @@ app.post('/api/register', async (req, res) => {
             email: req.body.email,
             password: req.body.password,
         });
-        res.send(user);
+        res.send(user.email); 
         res.json({ status: `ok`, mssg: `information reached the server` });
 
-    } catch (err) {
+    } catch (error) {
         res.json({ status: `error`, mssg: `email already exists in the database`});
     }
     
