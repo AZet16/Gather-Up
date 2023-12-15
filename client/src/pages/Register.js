@@ -26,9 +26,7 @@ function App() {
     
   }
 
-  async function loginUser() {
-    
-  }
+  
 
   return (
     <div class="main_page">
@@ -65,35 +63,6 @@ function App() {
           </form>
 
         </div>
-
-
-
-        <div class="login_form">
-
-          <h1>Register</h1>
-          <form class="login" onSubmit={loginUser}>
-           
-            
-            <input
-              value={email}
-              onChange={(e)=>SetEmail(e.target.value)}
-              type="text"
-              placeholder="email"
-              required="true"/>
-            
-            
-            <input
-              value={password}
-              onChange={(e)=>SetPassword(e.target.value)}
-              type="password"
-              placeholder="password"
-              required="true"/>
-
-            <input class="button" type='submit' value='Login'/>
-            
-          </form>
-
-</div>
       </div>
     </div>
   );

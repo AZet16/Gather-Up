@@ -45,9 +45,9 @@ app.post('/api/login', async (req, res) => {
     const user = await User.findOne({email: req.body.email, password: req.body.password});
    
     if(user) {
-        res.json({ status: `ok`, mssg: `authentication passed` });
+        res.json({ status: `ok`, mssg: `authentication passed`, user:true});
     } else {
-        res.json({ status: `error`, mssg: `failed authentication` });
+        res.json({ status: `error`, mssg: `failed authentication`, user: false });
     }
     
 });
