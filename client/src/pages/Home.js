@@ -4,9 +4,9 @@ import { useState } from 'react';
 function App() {
   
   return (
-    <div class="main_page">
+    <div className="main_page">
 
-      <div class="container">
+      <div className="container">
         <h1>Home Page</h1>
       </div>
 

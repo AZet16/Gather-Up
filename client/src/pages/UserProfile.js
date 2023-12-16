@@ -1,6 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
+import jwt from 'jsonwebtoken';
 
-function App(){
+function App() {
+    
+    useEffect(() => {
+        const token = localStorage.getItem(token);
+
+        if (token) {
+            const user = jwt.decode(token);
+            console.log(user);
+        }
+        
+    }, []);
     return (
 
         <div>

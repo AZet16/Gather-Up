@@ -1,8 +1,12 @@
 
 import { useState } from 'react';
 import './../index.css';
+import { Link } from "react-router-dom";
 
-function App() {
+
+function Login() {
+
+
   const [email, SetEmail] = useState('');
   const [password, SetPassword] = useState('');
 
@@ -11,7 +15,7 @@ function App() {
   async function loginUser(event) {
     event.preventDefault();
 
-    const response = await fetch('http://localhost:1011/api/login', {
+    const response = await fetch('http://localhost:1011/api/user/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -23,19 +27,35 @@ function App() {
     });
 
     const data = await response.json();
-    console.log(data);
+
+    if (data.user) {
+      console.log(`User ${data.user.name} Logged in successfully`);
+      window.location.href='/profile'
+    } else {
+      console.log('Please check your email and password details');
+    }
+    //console.log(data);
     
   }
 
-  return (
-    <div class="main_page">
+  function toRegister() {
+    
+  }
 
-      <div class="container">
+ 
+
+  return (
+
+     
+    
+
+    <div className="main_page">
+      <div className="container">
         
-        <div class="login_form">
+        <div className="login_form">
 
           <h1>Login</h1>
-          <form class="login" onSubmit={loginUser}>
+          <form className="login" onSubmit={loginUser}>
            
             
             <input
@@ -55,12 +75,17 @@ function App() {
 
             <input class="button" type='submit' value='Login'/>
             
-          </form>
+          </form> 
 
-</div>
+          <div className="register">
+                <Link to="/register">Register</Link>
+          </div>
+
+        </div>
+
       </div>
     </div>
   );
 }
 
-export default App;
+export default Login;

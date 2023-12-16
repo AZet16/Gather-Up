@@ -1,6 +1,8 @@
 
 import { useState } from 'react';
 import './../index.css';
+import { Link } from "react-router-dom";
+
 
 function App() {
   const [name, SetName] = useState('');
@@ -10,32 +12,39 @@ function App() {
   async function registerUser(event) {
     event.preventDefault();
 
-    const response = await fetch('http://localhost:1011/api/register', {
+    const response = await fetch('http://localhost:1011/api/user/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json'
       },
 
       body: JSON.stringify({
-        name, email, password,
-      }),
+        name, email, password
+      })
     });
 
     const data = await response.json();
+
+
     console.log(data);
+
+    SetName('');
+    SetEmail('');
+    SetPassword('');
     
   }
 
   
 
   return (
-    <div class="main_page">
+    <div className="main_page">
 
-      <div class="container">
-        <div class="register_form">
+      <div className="container">
+        <div className="register_form">
 
           <h1>Register</h1>
-          <form class="register" onSubmit={registerUser}>
+          <form className="register" onSubmit={registerUser}>
             <input
               value={name}
               onChange={(e)=>SetName(e.target.value)}
@@ -46,7 +55,7 @@ function App() {
             <input
               value={email}
               onChange={(e)=>SetEmail(e.target.value)}
-              type="text"
+              type="email"
               placeholder="email"
               required="true"/>
             
@@ -62,6 +71,9 @@ function App() {
             
           </form>
 
+          <div className="login">
+                <Link to="/login">Login</Link>
+          </div>
         </div>
       </div>
     </div>
