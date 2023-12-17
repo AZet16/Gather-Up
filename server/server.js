@@ -1,29 +1,28 @@
 const express = require("express");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const cors = require("cors");
-const connectDB= require("./config/db");
+const connectDB = require("./config/db");
 const dotenv = require("dotenv");
 //const User = require("../models/user_model");
-const jwt = require('jsonwebtoken');
-const userRoutes = require('./routes/userRoutes');
+const jwt = require("jsonwebtoken");
+const userRoutes = require("./routes/userRoutes");
+
+const app = express();
 
 dotenv.config();
-
 
 //connect to DB:
 connectDB();
 //mongoose.connect(process.env.DB_URL+"/G_Up_DB");
 
-const app = express();
-
 app.use(express.json());
 app.use(cors());
 
-app.use('/api/user', userRoutes);
+app.use("/api/user", userRoutes);
 
 //trial route
-app.get("/trial", (req,res) => {
-    res.send("Trial Page");
+app.get("/trial", (req, res) => {
+  res.send("Trial Page");
 });
 
 //pass new user info for registration form
@@ -72,7 +71,6 @@ app.post('/api/login', async (req, res) => {
 */
 //link
 
-
-app.listen(process.env.PORT, () => { 
-    console.log(`Server runs on port: ${process.env.PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server runs on port: ${process.env.PORT}`);
 });
