@@ -1,0 +1,7 @@
+div[role="alert"] {
+  font-size: 20px;
+  background-color: #f55c5c;
+  color: white;
+  padding: 20px;
+  border-radius: 5px;
+}
