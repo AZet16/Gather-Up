@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import "./../index.css";
 import { Link } from "react-router-dom";
+import ErrorMessage from "../components/ErrorMssg";
+import Loading from "../components/Loading";
 
 function App() {
   const [name, SetName] = useState("");
   const [email, SetEmail] = useState("");
   const [password, SetPassword] = useState("");
 
+  const [error, SetError] = useState(false);
+  const [loading, SetLoading] = useState(false);
+
   async function registerUser(event) {
     event.preventDefault();
+
+    SetLoading(true);
 
     const response = await fetch("http://localhost:1011/api/user/register", {
       method: "POST",
@@ -26,11 +33,17 @@ function App() {
 
     const data = await response.json();
 
-    console.log(data);
+    if (data) {
+      console.log(data);
 
-    SetName("");
-    SetEmail("");
-    SetPassword("");
+      SetName("");
+      SetEmail("");
+      SetPassword("");
+      SetLoading(false);
+    } else {
+      SetError(true);
+      SetLoading(false);
+    }
   }
 
   return (
@@ -38,6 +51,12 @@ function App() {
       <div className="container">
         <div className="register_form">
           <h1>Register</h1>
+          {error && (
+            <ErrorMessage className="error" variant="danger">
+              {error}
+            </ErrorMessage>
+          )}
+          {loading && <Loading />}
           <form className="register" onSubmit={registerUser}>
             <input
               value={name}

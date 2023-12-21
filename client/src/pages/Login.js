@@ -81,7 +81,11 @@ function Login() {
     <div className="main_page">
       <div className="container">
         <div className="login_form">
-          {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
+          {error && (
+            <ErrorMessage className="error" variant="danger">
+              {error}
+            </ErrorMessage>
+          )}
           {loading && <Loading />}
           <h1>Login</h1>
           <form className="login" onSubmit={authUser}>

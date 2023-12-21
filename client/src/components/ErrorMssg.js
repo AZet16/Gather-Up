@@ -12,7 +12,7 @@ const ErrorMessage2 = ({ variant = "info", children }) => {
   );
 };
 
-const ErrorMessage = ({ variant = "info", children }) => {
+const ErrorMessage1 = ({ variant = "info", children }) => {
   return (
     <Alert>
       <strong
@@ -32,10 +32,10 @@ const ErrorMessage = ({ variant = "info", children }) => {
   );
 };
 
-const ErrorMessage1 = ({ variant = "info", children }) => {
+const ErrorMessage = ({ className = "error", children }) => {
   return (
-    <Alert variant={variant} style={{ fontSize: 20 }}>
-      <strong>{children}</strong>
+    <Alert className={className} style={{ fontSize: 20 }}>
+      <strong className={className}>{children}</strong>
     </Alert>
   );
 };
@@ -52,3 +52,4 @@ const WarningMessage = ({ variant = "info", children }) => {
 };
 
 export default ErrorMessage;
+//module.exports = { ErrorMessage, WarningMessage };
