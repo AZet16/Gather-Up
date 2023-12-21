@@ -3,6 +3,8 @@ import { useState } from "react";
 import "./../index.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Loading from "../components/Loading";
+import ErrorMessage from "../components/ErrorMssg";
 
 function Login() {
   const [email, SetEmail] = useState("");
@@ -28,7 +30,7 @@ function Login() {
     const data = await response.json();
 
     if (data.user) {
-      console.log(`User ${data.user.name} Logged in successfully`);
+      //console.log(`User ${data.user.name} Logged in successfully`);
       window.location.href = "/profile";
     } else {
       console.log("Please check your email and password details");
@@ -54,12 +56,20 @@ function Login() {
         config
       );
 
-      console.log(`User ${data.user.name} Logged in successfully`);
-
-      localStorage.setItem("userInfo", JSON.stringify(data));
       SetLoading(false);
+      if (data.user) {
+        //console.log(`User ${data.user.name} Logged in successfully`);
+        window.location.href = "/profile";
+        localStorage.setItem("userInfo", JSON.stringify(data));
+      } else {
+        console.log("Please check your email and password details");
+        SetError(error.response.data.message);
+      }
+
+      //console.log(`User ${data.user.name} Logged in successfully`);
     } catch (error) {
-      SetError(error.response.data.message);
+      SetError("wrong email or password");
+      //SetError(error.response.data.message);
     }
   };
 
@@ -69,6 +79,8 @@ function Login() {
     <div className="main_page">
       <div className="container">
         <div className="login_form">
+          {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
+          {loading && <Loading />}
           <h1>Login</h1>
           <form className="login" onSubmit={authUser}>
             <input
