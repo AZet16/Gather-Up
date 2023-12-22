@@ -7,7 +7,18 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import UserProfile from "./pages/UserProfile";
 
+import { useNavigate } from "react-router-dom";
+
 function App() {
+  const navigate = useNavigate();
+
+  /*useEffect(() => {
+    const userInfo = localStorage.getItem("userInfo");
+    if (userInfo) {
+      history.push("/profile");
+    }
+  }, [history]);*/
+
   return (
     <>
       <Navbar />

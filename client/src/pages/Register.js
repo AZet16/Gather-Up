@@ -3,46 +3,117 @@ import "./../index.css";
 import { Link } from "react-router-dom";
 import ErrorMessage from "../components/ErrorMssg";
 import Loading from "../components/Loading";
+import axios from "axios";
+
+import { useNavigate } from "react-router-dom";
 
 function App() {
+  const navigate = useNavigate();
+
   const [name, SetName] = useState("");
   const [email, SetEmail] = useState("");
   const [password, SetPassword] = useState("");
+  const [confirmpassword, SetConfirmPassword] = useState("");
 
-  const [error, SetError] = useState(false);
+  const [emailError, SetEmailError] = useState(false);
+  const [passError, SetPassError] = useState(false);
   const [loading, SetLoading] = useState(false);
 
   async function registerUser(event) {
     event.preventDefault();
 
-    SetLoading(true);
-
-    const response = await fetch("http://localhost:1011/api/user/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (data) {
-      console.log(data);
-
-      SetName("");
-      SetEmail("");
-      SetPassword("");
-      SetLoading(false);
+    if (password != confirmpassword) {
+      SetPassError(true);
     } else {
-      SetError(true);
-      SetLoading(false);
+      SetPassError(false);
+      SetLoading(true);
+
+      const response = await fetch("http://localhost:1011/api/user/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log(data);
+        SetLoading(false);
+        console.log("successfully created user");
+
+        SetName("");
+        SetEmail("");
+        SetPassword("");
+        SetConfirmPassword("");
+        SetEmailError(false);
+
+        navigate("/login");
+      } else {
+        SetEmailError(true);
+        SetLoading(false);
+      }
+    }
+  }
+
+  async function createUser(event) {
+    event.preventDefault();
+
+    SetLoading(false);
+    SetEmailError(false);
+    SetPassError(false);
+
+    if (password !== confirmpassword) {
+      SetPassError(true);
+    } else {
+      SetPassError(false);
+
+      try {
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+
+        SetLoading(true);
+
+        const { response } = await axios.post(
+          "api/user/register",
+          { name, email, password },
+          config
+        );
+
+        const data = await response.json();
+
+        if (response.ok) {
+          SetLoading(false);
+          //localStorage.setItem("userInfo", JSON.stringify(data));
+          alert("successfully logged in");
+
+          //SetName("");
+          //SetEmail("");
+          //SetPassword("");
+          //SetConfirmPassword("");
+
+          navigate("/login");
+        } else {
+          SetEmailError(true);
+        }
+
+        //console.log(`User ${data.user.name} Logged in successfully`);
+      } catch (emailError) {
+        SetEmailError(true);
+        //SetError(error.response.data.message);
+
+        SetLoading(false);
+      }
     }
   }
 
@@ -51,19 +122,24 @@ function App() {
       <div className="container">
         <div className="register_form">
           <h1>Register</h1>
-          {error && (
+          {emailError && (
             <ErrorMessage className="error" variant="danger">
-              {error}
+              {"email is already used for another account"}
+            </ErrorMessage>
+          )}
+          {passError && (
+            <ErrorMessage className="error" variant="danger">
+              {"passowrds don't match"}
             </ErrorMessage>
           )}
           {loading && <Loading />}
-          <form className="register" onSubmit={registerUser}>
+          <form className="register" onSubmit={createUser}>
             <input
               value={name}
               onChange={(e) => SetName(e.target.value)}
               type="text"
               placeholder="nickname"
-              required="true"
+              required
             />
 
             <input
@@ -71,7 +147,7 @@ function App() {
               onChange={(e) => SetEmail(e.target.value)}
               type="email"
               placeholder="email"
-              required="true"
+              required
             />
 
             <input
@@ -79,7 +155,15 @@ function App() {
               onChange={(e) => SetPassword(e.target.value)}
               type="password"
               placeholder="password"
-              required="true"
+              required
+            />
+
+            <input
+              value={confirmpassword}
+              onChange={(e) => SetConfirmPassword(e.target.value)}
+              type="password"
+              placeholder="password"
+              required
             />
 
             <input className="button" type="submit" value="Register" />

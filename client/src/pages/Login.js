@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "./../index.css";
 import { Link } from "react-router-dom";
@@ -8,16 +8,23 @@ import ErrorMessage from "../components/ErrorMssg";
 import WarningMessage from "../components/WarningMssg";
 import MessageStyle from "./../components/style.css";
 
+import { useNavigate } from "react-router-dom";
+
 function Login() {
+  const navigate = useNavigate();
+
   const [email, SetEmail] = useState("");
   const [password, SetPassword] = useState("");
   const [error, SetError] = useState(false);
   const [loading, SetLoading] = useState(false);
 
-  async function loginUser(event) {
+  const loginUser = async (event) => {
     event.preventDefault();
 
-    const response = await fetch("http://localhost:1011/api/user/login", {
+    SetLoading(false);
+    SetError(false);
+
+    const response = await fetch("/api/user/login", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -31,51 +38,55 @@ function Login() {
 
     const data = await response.json();
 
-    if (data.user) {
-      //console.log(`User ${data.user.name} Logged in successfully`);
-      window.location.href = "/profile";
+    if (response.ok) {
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      SetLoading(false);
+      navigate("/profile");
     } else {
       console.log("Please check your email and password details");
+      SetLoading(false);
+      SetError(data.error);
     }
     //console.log(data);
-  }
+  };
 
-  const authUser = async (event) => {
+  async function authUser(event) {
     event.preventDefault();
+    SetError(false);
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    SetLoading(true);
 
     try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-
-      SetLoading(true);
-
-      const { data } = await axios.post(
+      const { response } = await axios.post(
         "api/user/login",
         { email, password },
         config
       );
 
-      SetLoading(false);
-      if (data.user) {
-        //console.log(`User ${data.user.name} Logged in successfully`);
-        window.location.href = "/profile";
-        localStorage.setItem("userInfo", JSON.stringify(data));
+      //const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem("userInfo", JSON.stringify(response));
+        SetLoading(false);
+        navigate("/profile");
       } else {
         console.log("Please check your email and password details");
-        SetError(error.response.data.message);
+        SetLoading(false);
+        SetError(response.error);
       }
 
       //console.log(`User ${data.user.name} Logged in successfully`);
     } catch (error) {
-      SetError("wrong email or password");
+      SetError(true);
+      //SetError(response.error);
       //SetError(error.response.data.message);
     }
-  };
-
-  function toRegister() {}
+  }
 
   return (
     <div className="main_page">
@@ -83,7 +94,7 @@ function Login() {
         <div className="login_form">
           {error && (
             <ErrorMessage className="error" variant="danger">
-              {error}
+              "Wrong Email or Password"
             </ErrorMessage>
           )}
           {loading && <Loading />}
@@ -94,7 +105,7 @@ function Login() {
               onChange={(e) => SetEmail(e.target.value)}
               type="text"
               placeholder="email"
-              required={true}
+              required
             />
 
             <input
@@ -102,7 +113,7 @@ function Login() {
               onChange={(e) => SetPassword(e.target.value)}
               type="password"
               placeholder="password"
-              required={true}
+              required
             />
 
             <input className="button" type="submit" value="Login" />
