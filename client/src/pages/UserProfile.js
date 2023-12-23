@@ -15,9 +15,20 @@ function App() {
     }
   }, [navigate]);
 
+  async function Logout(event) {
+    localStorage.removeItem("userInfo");
+    navigate("/login");
+  }
+
   return (
     <div>
       <h1>User Profile</h1>
+
+      <div>
+        <button type="button" onClick={Logout}>
+          Logout
+        </button>
+      </div>
     </div>
   );
 }

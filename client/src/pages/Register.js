@@ -75,45 +75,32 @@ function App() {
     } else {
       SetPassError(false);
 
-      try {
-        const config = {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
 
-        SetLoading(true);
+      SetLoading(true);
 
-        const { response } = await axios.post(
-          "api/user/register",
-          { name, email, password },
-          config
-        );
+      const response = await axios
+        .post("api/user/register", { name, email, password })
+        .then((response) => {
+          if (response.data.status == "error") {
+            SetEmailError(true);
+          } else {
+            SetLoading(false);
+            SetEmailError(false);
+            alert("successfully logged in");
 
-        const data = await response.json();
-
-        if (response.ok) {
+            navigate("/login");
+          }
+        })
+        .catch(function (error) {
+          console.log("Could't fetch the data");
+          return Promise.reject(error);
           SetLoading(false);
-          //localStorage.setItem("userInfo", JSON.stringify(data));
-          alert("successfully logged in");
-
-          //SetName("");
-          //SetEmail("");
-          //SetPassword("");
-          //SetConfirmPassword("");
-
-          navigate("/login");
-        } else {
-          SetEmailError(true);
-        }
-
-        //console.log(`User ${data.user.name} Logged in successfully`);
-      } catch (emailError) {
-        SetEmailError(true);
-        //SetError(error.response.data.message);
-
-        SetLoading(false);
-      }
+        });
     }
   }
 

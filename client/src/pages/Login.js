@@ -54,38 +54,37 @@ function Login() {
     event.preventDefault();
     SetError(false);
 
+    SetLoading(true);
+
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
 
-    SetLoading(true);
+    const response = await axios
+      .post("api/user/login", {
+        email,
+        password,
+      })
+      .then((response) => {
+        console.log(response);
 
-    try {
-      const { response } = await axios.post(
-        "api/user/login",
-        { email, password },
-        config
-      );
-
-      //const data = await response.json();
-      if (response.ok) {
-        localStorage.setItem("userInfo", JSON.stringify(response));
+        if (response.data.status == "error") {
+          SetError(true);
+        } else {
+          SetError(false);
+          SetLoading(false);
+          localStorage.setItem("userInfo", JSON.stringify(response));
+          navigate("/profile");
+        }
+      })
+      .catch(function (error) {
+        console.log("Could't fetch the data");
+        return Promise.reject(error);
         SetLoading(false);
-        navigate("/profile");
-      } else {
-        console.log("Please check your email and password details");
-        SetLoading(false);
-        SetError(response.error);
-      }
-
-      //console.log(`User ${data.user.name} Logged in successfully`);
-    } catch (error) {
-      SetError(true);
-      //SetError(response.error);
-      //SetError(error.response.data.message);
-    }
+        SetError(true);
+      });
   }
 
   return (
