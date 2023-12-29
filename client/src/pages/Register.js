@@ -107,58 +107,56 @@ function App() {
   return (
     <div className="main_page">
       <div className="container">
-        <div className="register_form">
-          <h1>Register</h1>
-          {emailError && (
-            <ErrorMessage className="error" variant="danger">
-              {"email is already used for another account"}
-            </ErrorMessage>
-          )}
-          {passError && (
-            <ErrorMessage className="error" variant="danger">
-              {"passowrds don't match"}
-            </ErrorMessage>
-          )}
-          {loading && <Loading />}
-          <form className="register" onSubmit={createUser}>
-            <input
-              value={name}
-              onChange={(e) => SetName(e.target.value)}
-              type="text"
-              placeholder="nickname"
-              required
-            />
+        <h1>Register</h1>
+        {emailError && (
+          <ErrorMessage className="error" variant="danger">
+            {"email is already used for another account"}
+          </ErrorMessage>
+        )}
+        {passError && (
+          <ErrorMessage className="error" variant="danger">
+            {"passowrds don't match"}
+          </ErrorMessage>
+        )}
+        {loading && <Loading />}
+        <form className="register" onSubmit={createUser}>
+          <input
+            value={name}
+            onChange={(e) => SetName(e.target.value)}
+            type="text"
+            placeholder="nickname"
+            required
+          />
 
-            <input
-              value={email}
-              onChange={(e) => SetEmail(e.target.value)}
-              type="email"
-              placeholder="email"
-              required
-            />
+          <input
+            value={email}
+            onChange={(e) => SetEmail(e.target.value)}
+            type="email"
+            placeholder="email"
+            required
+          />
 
-            <input
-              value={password}
-              onChange={(e) => SetPassword(e.target.value)}
-              type="password"
-              placeholder="password"
-              required
-            />
+          <input
+            value={password}
+            onChange={(e) => SetPassword(e.target.value)}
+            type="password"
+            placeholder="password"
+            required
+          />
 
-            <input
-              value={confirmpassword}
-              onChange={(e) => SetConfirmPassword(e.target.value)}
-              type="password"
-              placeholder="password"
-              required
-            />
+          <input
+            value={confirmpassword}
+            onChange={(e) => SetConfirmPassword(e.target.value)}
+            type="password"
+            placeholder="password"
+            required
+          />
 
-            <input className="button" type="submit" value="Register" />
-          </form>
+          <input className="button" type="submit" value="Register" />
+        </form>
 
-          <div className="login">
-            <Link to="/login">Login</Link>
-          </div>
+        <div className="login">
+          <Link to="/login">Login</Link>
         </div>
       </div>
     </div>

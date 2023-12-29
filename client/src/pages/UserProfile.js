@@ -21,13 +21,15 @@ function App() {
   }
 
   return (
-    <div>
-      <h1>User Profile</h1>
+    <div className="main_page">
+      <div className="container">
+        <h1>User Profile</h1>
 
-      <div>
-        <button type="button" onClick={Logout}>
-          Logout
-        </button>
+        <div>
+          <button type="button" onClick={Logout}>
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   );

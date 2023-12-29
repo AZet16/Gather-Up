@@ -90,37 +90,35 @@ function Login() {
   return (
     <div className="main_page">
       <div className="container">
-        <div className="login_form">
-          {error && (
-            <ErrorMessage className="error" variant="danger">
-              "Wrong Email or Password"
-            </ErrorMessage>
-          )}
-          {loading && <Loading />}
-          <h1>Login</h1>
-          <form className="login" onSubmit={authUser}>
-            <input
-              value={email}
-              onChange={(e) => SetEmail(e.target.value)}
-              type="text"
-              placeholder="email"
-              required
-            />
+        {error && (
+          <ErrorMessage className="error" variant="danger">
+            "Wrong Email or Password"
+          </ErrorMessage>
+        )}
+        {loading && <Loading />}
+        <h1>Login</h1>
+        <form className="login" onSubmit={authUser}>
+          <input
+            value={email}
+            onChange={(e) => SetEmail(e.target.value)}
+            type="text"
+            placeholder="email"
+            required
+          />
 
-            <input
-              value={password}
-              onChange={(e) => SetPassword(e.target.value)}
-              type="password"
-              placeholder="password"
-              required
-            />
+          <input
+            value={password}
+            onChange={(e) => SetPassword(e.target.value)}
+            type="password"
+            placeholder="password"
+            required
+          />
 
-            <input className="button" type="submit" value="Login" />
-          </form>
+          <input className="button" type="submit" value="Login" />
+        </form>
 
-          <div className="register">
-            <Link to="/register">Register</Link>
-          </div>
+        <div className="register">
+          <Link to="/register">Register</Link>
         </div>
       </div>
     </div>
