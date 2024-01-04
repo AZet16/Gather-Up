@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const User = require("../models/user_model");
+//const User = require("../models/user_model");
 const Society = require("../models/society_model");
 
 const jwt = require("jsonwebtoken");
@@ -7,8 +7,7 @@ const generateToken = require("../utils/genTokens");
 
 //pass new user info for registration form
 const createSociety = asyncHandler(async (req, res) => {
-  const { name, owner_id, description, members_id, pubic, challenges } =
-    req.body;
+  const { owner_id, access, name, description } = req.body;
 
   const dublicated = await Society.findOne({ name });
 
@@ -20,12 +19,10 @@ const createSociety = asyncHandler(async (req, res) => {
     console.log("such name already exists");
   } else {
     const society = await Society.create({
-      name: req.body.name,
       owner_id: req.body.email,
+      access: req.body.access,
+      name: req.body.name,
       description: req.body.password,
-      members_id: req.body.members_id,
-      public: req.body.pubic,
-      challenges: req.body.challenges,
     });
 
     if (society) {
@@ -34,7 +31,7 @@ const createSociety = asyncHandler(async (req, res) => {
         mssg: `information reached the server`,
         _id: society._id,
         owner: society.owner_id,
-        token: generateToken(user._id),
+        //token: generateToken(user._id),
       });
       console.log("society created");
     } else {
@@ -67,4 +64,4 @@ const findSociety = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerUser, findSociety };
+module.exports = { createSociety, findSociety };

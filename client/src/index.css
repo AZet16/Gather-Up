@@ -11,7 +11,7 @@ p.comment {
   font-size: 10px;
   color: darkgrey;
   margin: 0;
-  padding: 0;
+  padding: 5px;
 }
 
 code {
@@ -142,4 +142,8 @@ form.create_society {
 
 form.create_society input {
   margin-bottom: 10px;
+}
+
+form.create_society select {
+  margin-top: 10px;
 }

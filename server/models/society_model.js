@@ -7,7 +7,7 @@ const societySchema = new mongoose.Schema(
     owner_id: { type: String, required: true, unique: true },
     description: { type: String },
     members_ids: { type: Array },
-    public: { type: Boolean },
+    access_type: { type: String },
     challenges: { type: Array },
   },
   { collection: "societiesDB" }
