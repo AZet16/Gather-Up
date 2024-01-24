@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 //const User = require("../models/user_model");
 const jwt = require("jsonwebtoken");
 const userRoutes = require("./routes/userRoutes");
-//const societiesRoutes = require("./routes/societiesRoutes");
+const societiesRoutes = require("./routes/societiesRoutes");
 
 const app = express();
 
@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api/user", userRoutes);
-//app.use("/api/societies", societiesRoutes);
+app.use("/api/societies", societiesRoutes);
 
 //trial route
 app.get("/trial", (req, res) => {

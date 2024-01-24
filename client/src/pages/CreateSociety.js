@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./../index.css";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 import Loading from "../components/Loading";
 import ErrorMessage from "../components/ErrorMssg";
@@ -53,14 +54,58 @@ function CreateSociety() {
     // automatically check if user is logged in and automatically set their id as owner
     // record special society id and creation date
     event.preventDefault();
+    SetError(false);
+
+    SetLoading(true);
 
     if (access === "description") {
       SetLoading(false);
       SetError("Please, choose level of access");
       console.log(error);
+    } else if (name.length < 5) {
+      SetLoading(false);
+      SetError("Try to keep name of society unique and more that 5 character");
+      console.log(error);
     } else {
       SetError("");
-      console.log("trying to create a society");
+      const userInfo = localStorage.getItem("userInfo");
+      const userData = JSON.parse(userInfo);
+
+      console.log("trying to create a society for user " + userData.data.email);
+      console.log(" with id: " + userData.data._id);
+
+      SetOwnerId(userData.data._id);
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const response = await axios
+        .post("api/societies/create", {
+          name: name,
+          owner_id: userData.data._id,
+          description: description,
+          access_type: access,
+        })
+        .then((response) => {
+          console.log(response);
+
+          if (response.data.status == "error") {
+            SetError(true);
+          } else {
+            SetError(false);
+            SetLoading(false);
+            navigate("/societies");
+          }
+        })
+        .catch(function (error) {
+          console.log("Could't fetch the data");
+          return Promise.reject(error);
+          SetLoading(false);
+          SetError(true);
+        });
     }
 
     //navigate("/societies");

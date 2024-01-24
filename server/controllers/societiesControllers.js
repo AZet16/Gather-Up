@@ -1,39 +1,55 @@
 const asyncHandler = require("express-async-handler");
-//const User = require("../models/user_model");
+const User = require("../models/user_model");
 const Society = require("../models/society_model");
 
 const jwt = require("jsonwebtoken");
 const generateToken = require("../utils/genTokens");
 
-//pass new user info for registration form
+//create society
 const createSociety = asyncHandler(async (req, res) => {
-  const { owner_id, access, name, description } = req.body;
+  const { name, owner_id, description, access_type } = req.body;
 
   const dublicated = await Society.findOne({ name });
+  const def_access = "private_opt";
 
   if (dublicated) {
+    //check if society already exists
     res.json({
       status: `error`,
       mssg: `society's name already exists in the database`,
     });
     console.log("such name already exists");
   } else {
+    //create a society
     const society = await Society.create({
-      owner_id: req.body.email,
-      access: req.body.access,
-      name: req.body.name,
-      description: req.body.password,
+      name,
+      owner_id,
+      description,
+      access_type: access_type || def_access,
     });
 
     if (society) {
+      //once society is successfully created
+
       res.json({
         status: `ok`,
         mssg: `information reached the server`,
         _id: society._id,
         owner: society.owner_id,
+        access_type: society.access_type,
         //token: generateToken(user._id),
       });
       console.log("society created");
+
+      //add this society to the list of societies for the user
+
+      await User.findByIdAndUpdate(society.owner_id, {
+        $push: {
+          societies: society._id,
+        },
+      });
+
+      console.log("added to user's societies list");
     } else {
       console.log("other issue when creating society");
       res.json({ status: `error`, mssg: `issue creating society` });
@@ -51,7 +67,7 @@ const findSociety = asyncHandler(async (req, res) => {
       status: `ok`,
       mssg: `found society`,
       _id: society._id,
-      owner_id: society.email,
+      owner_id: society.owner_id,
     });
     console.log("successfully logged in the society");
   } else {

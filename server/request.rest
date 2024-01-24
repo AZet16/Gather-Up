@@ -19,3 +19,24 @@ Content-Type: application/json
     "email": "admin2@gmail.com", 
     "password": "admin123"
 }
+
+###
+POST http://localhost:1011/api/societies/create
+Content-Type: application/json
+
+{
+    "name": "society1", 
+    "owner_id": "65aac1b5f86947f7b9bc101b",
+    "description": "trial scoriety",
+    "access_type":"public_opt"
+}
+
+###
+POST http://localhost:1011/api/societies/create
+Content-Type: application/json
+
+{
+    "name": "society2", 
+    "owner_id": "65aac1b5f86947f7b9bc101b",
+    "description": "trial scoriety"
+}
